@@ -1,0 +1,67 @@
+
+# .github/workflows/backendjava.yml
+name: Build and Publish Artifact to EC2
+
+on:
+  push:
+    branches: [ development ]
+
+jobs:
+  build:
+    name: Compile and Package Java
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Cache Maven packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-m2-
+
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+
+    - name: Upload JAR artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: java-app-jar
+        path: target/*.jar
+
+  deploy:
+    name: Deploy Artifact to EC2
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: java-app-jar
+
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.8.1
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    - name: Add EC2 to known_hosts
+      run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to EC2
+      env:
+        HOST: ${{ secrets.EC2_HOST }}
+        USER: ${{ secrets.EC2_USER }}
+        APP_DIR: ${{ secrets.APP_DIR }}
+      run: |
+        scp java-app-jar/*.jar $USER@$HOST:$APP_DIR/app.jar
+        ssh $USER@$HOST "sudo systemctl restart backendjava.service"
