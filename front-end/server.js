@@ -166,5 +166,5 @@ app.post('/api/recommendations/generate', (req, res) => {
 // Inicia o servidor
 app.listen(PORT, () => {
     console.log(`Servidor backend rodando na porta ${PORT}`);
-    console.log(`Aguardando requisições do frontend em http://localhost:${PORT}/api/recommendations/generate`);
+    console.log(`Aguardando requisições do frontend em http://greenteam.devopssc.com.br:${PORT}/api/recommendations/generate`);
 });

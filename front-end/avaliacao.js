@@ -204,7 +204,7 @@ if (feedbackFormEl) {
         localStorage.setItem(`studentFeedback_${currentSelectedStudent.id}`, difficulties);
 
         try {
-            const response = await fetch('http://localhost:8080/api/recommendations/generate', {
+            const response = await fetch('http://greenteam.devopssc.com.br:8080/api/recommendations/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
