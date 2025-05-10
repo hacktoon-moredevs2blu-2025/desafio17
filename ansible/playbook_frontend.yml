@@ -1,0 +1,40 @@
+---
+- name: Deploy do frontend no NGINX
+  hosts: app
+  become: yes
+
+  vars:
+    repo_url: "https://github.com/Matloop/HackathonDevsFront.git"
+    clone_dir: "/home/ubuntu/frontend"
+    nginx_root: "/var/www/html"
+
+  tasks:
+    - name: Instala NGINX
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Remove arquivos padrão do NGINX
+      file:
+        path: "{{ nginx_root }}/index.nginx-debian.html"
+        state: absent
+
+    - name: Clona o repositório do frontend
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ clone_dir }}"
+        version: main
+
+    - name: Copia arquivos do frontend para o NGINX
+      copy:
+        src: "{{ clone_dir }}/"
+        dest: "{{ nginx_root }}/"
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Reinicia o NGINX
+      service:
+        name: nginx
+        state: restarted
