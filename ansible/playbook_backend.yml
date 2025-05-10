@@ -1,47 +1,40 @@
 ---
-- name: Deploy aplicação Java no EC2
+- name: Deploy do .jar do backend já compilado
   hosts: app
-  become: yes
+#  become: yes
 
   vars:
-    # Repositório do backend (contém o pom.xml na raiz)
-    repo_url: "https://github.com/Matloop/HackatonDevsBack.git"
-
-    # Diretório onde a aplicação será clonada
-    app_dir: "/home/ubuntu/app"
-
-    # Nome do .jar final
+    jar_local: "../back-end/app.jar"
+    remote_dir: "/home/ubuntu/app"
     jar_name: "app.jar"
+    zip_name: "app.zip"
 
   tasks:
-    - name: Instala Java e Maven
-      apt:
-        name:
-          - openjdk-17-jdk
-          - maven
-        state: present
-        update_cache: yes
+    - name: Cria diretório remoto
+      file:
+        path: "{{ remote_dir }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
 
-    - name: Clona o repositório do backend
-      git:
-        repo: "{{ repo_url }}"
-        dest: "{{ app_dir }}"
-        version: main
+    - name: Comprime o .jar localmente
+      delegate_to: localhost
+      run_once: true
+      shell: zip -j /tmp/{{ zip_name }} {{ jar_local }}
 
-    - name: Gera o .jar do backend
-      shell: mvn clean package
-      args:
-        chdir: "{{ app_dir }}"
-      register: build_output
-
-    - name: Copia o .jar final para o diretório base
+    - name: Copia o .zip para a EC2
       copy:
+        src: "/tmp/{{ zip_name }}"
+        dest: "{{ remote_dir }}/{{ zip_name }}"
+
+    - name: Descompacta o .zip na EC2
+      unarchive:
+        src: "{{ remote_dir }}/{{ zip_name }}"
+        dest: "{{ remote_dir }}/"
         remote_src: yes
-        src: "{{ app_dir }}/target/*.jar"
-        dest: "{{ app_dir }}/{{ jar_name }}"
-      ignore_errors: yes
 
     - name: Executa o .jar na porta 8080 com nohup
-      shell: "nohup java -jar {{ app_dir }}/{{ jar_name }} > {{ app_dir }}/log.out 2>&1 &"
+      shell: "nohup java -jar {{ remote_dir }}/{{ jar_name }} > {{ remote_dir }}/log.out 2>&1 &"
       args:
-        chdir: "{{ app_dir }}"
+        chdir: "{{ remote_dir }}"

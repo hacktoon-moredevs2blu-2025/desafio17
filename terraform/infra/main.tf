@@ -28,7 +28,7 @@ resource "aws_vpc" "main" {
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-1a"
+  availability_zone       = "us-west-1c"
   map_public_ip_on_launch = true
 }
 
@@ -94,7 +94,7 @@ resource "aws_instance" "app_server" {
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.public_subnet.id
   vpc_security_group_ids      = [aws_security_group.allow_ssh_http.id]
-  key_name                    = aws_key_pair.lb_ssh_key_pair.key_name
+  key_name                    = aws_key_pair.lb_ssh_green_team_key_pair.key_name
 
   user_data = file("startup.sh")
 
@@ -108,14 +108,14 @@ resource "tls_private_key" "lb_ssh_key" {
   algorithm = "RSA"
   rsa_bits  = 2048
 }
-resource "aws_key_pair" "lb_ssh_key_pair" {
-  key_name   = "key_pair"
+resource "aws_key_pair" "lb_ssh_green_team_key_pair" {
+  key_name   = "green_team_key_pair"
   public_key = tls_private_key.lb_ssh_key.public_key_openssh
 }
 
 resource "local_file" "ssh_key_file" {
   content         = tls_private_key.lb_ssh_key.private_key_pem
-  filename        = "./key_pair.pem"
+  filename        = "./green_team_key_pair.pem"
   file_permission = "0600"
 }
 

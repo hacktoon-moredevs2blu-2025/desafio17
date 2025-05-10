@@ -1,11 +1,10 @@
 ---
-- name: Deploy do frontend no NGINX
+- name: Deploy do frontend usando arquivos locais
   hosts: app
   become: yes
 
   vars:
-    repo_url: "https://github.com/Matloop/HackathonDevsFront.git"
-    clone_dir: "/home/ubuntu/frontend"
+    local_frontend: "../front-end"
     nginx_root: "/var/www/html"
 
   tasks:
@@ -20,15 +19,9 @@
         path: "{{ nginx_root }}/index.nginx-debian.html"
         state: absent
 
-    - name: Clona o repositório do frontend
-      git:
-        repo: "{{ repo_url }}"
-        dest: "{{ clone_dir }}"
-        version: main
-
-    - name: Copia arquivos do frontend para o NGINX
+    - name: Copia o frontend local para a EC2
       copy:
-        src: "{{ clone_dir }}/"
+        src: "{{ local_frontend }}/"
         dest: "{{ nginx_root }}/"
         owner: www-data
         group: www-data
