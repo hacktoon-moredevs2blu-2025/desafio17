@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiais de Apoio - Aluno</title>
+    <link rel="stylesheet" href="aluno_materiais.css"> <!-- CSS para esta página -->
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="logo-area">
+            <img src="blusoft.svg" alt="BLUSOFT ACATE Logo" class="logo-main-img">
+        </div>
+        <div class="header-actions">
+            <a href="#" class="user-profile-link">Perfil do usuário</a>
+            <span class="icon-placeholder">
+                <img src="icons/sino.svg" alt="Notificações">
+                
+            </span>
+            <span class="icon-placeholder">
+                <img src="icons/email.svg" alt="Mensagens">
+               
+            </span>
+            <span class="icon-placeholder">
+                <img src="icons/perfil.svg" alt="Perfil">
+            </span>
+            <!-- Botão para mudar para a visão do Professor -->
+            <button id="roleToggle" class="role-toggle-button">Professor</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#">Dados Pessoais</a></li>
+                    <li><a href="#">Avisos e Notificações</a></li>
+                    <li><a href="#">Faltas e justificativas</a></li>
+                    <li><a href="#">Contatos</a></li>
+                    <li><a href="materiais_de_apoio.html" class="active">Materiais de Apoio</a></li>
+                    <li><a href="#">Gerenciar Cursos</a></li>
+                    <li><a href="#">Suporte</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content-area">
+            <div class="breadcrumbs">Painel do usuário > Materiais de Apoio</div>
+
+            <div class="support-materials-layout">
+                <div class="difficulty-input-section">
+                    <h2>Dificuldades Apontadas pelo Professor:</h2>
+                    <textarea id="difficultyDisplay" placeholder="Nenhuma dificuldade específica registrada pelo professor." readonly></textarea>
+                </div>
+
+                <div class="materials-section">
+                    <h2>Materiais Recomendados e de Apoio:</h2>
+                    <div class="materials-search-bar-container">
+                        <img src="pesquisar.svg" alt="Barra de Pesquisa" class="search-bar-svg">
+                        <input type="text" id="materialSearch" placeholder=" " class="search-input-overlay">
+                        <!-- Se o SVG não tem placeholder visual, adicione-o ao input: placeholder="Buscar materiais..." -->
+                        <button id="filterButtonTrigger" class="filter-button-overlay-trigger" aria-label="Filtrar materiais"></button>
+                    </div>
+                    <div id="materialsListContainer" class="materials-list">
+                        <p class="loading-materials">Carregando materiais...</p>
+                        <!-- Os itens de material serão populados pelo aluno_materiais.js -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="aluno_materiais.js" defer></script> <!-- JS para esta página -->
+</body>
+</html>

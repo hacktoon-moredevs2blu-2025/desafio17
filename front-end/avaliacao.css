@@ -1,0 +1,379 @@
+/* ==========================================================================
+   1. CSS Custom Properties (Variables) - Single Theme based on Image
+   ========================================================================== */
+   :root {
+    --font-family-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    /* Backgrounds */
+    --bg-main: #33373A;                         /* Overall dark background from image */
+    --bg-header: #FFFFFF;                       /* Header white background */
+    --bg-logo-sub-emphasis: #9ABE31;            /* "POLO - BLUMENAU" green background */
+    --bg-breadcrumbs: #9ABE31;                  /* Breadcrumbs green background */
+    --bg-card: #FFFFFF;                         /* Cards (student list, feedback) white background */
+    --bg-student-list-table-header: #E9EFFB;    /* Student list table header light blue (adjusted for image) */
+    --bg-options-icon-button: #9ABE31;          /* "..." button green background in student list */
+    --bg-input-textarea: #F5F5F5;               /* Textarea light grey background (adjusted for image) */
+    --bg-submit-button: #9ABE31;                /* "Enviar" button green background */
+    --bg-material-item: #F8F9FA;                /* Material items for recommendations (if used) */
+    --bg-badge-notification: red;               /* Notification badge background */
+
+    /* Text Colors */
+    --text-on-dark-bg: #E0E0E0;                 /* General light text if any on main dark background */
+    --text-on-light-bg: #333333;                /* General dark text for light backgrounds (cards, header) */
+    --text-logo-main: #333333;                  /* "BLUSOFT ACATE" text */
+    --text-logo-sub-emphasis: #333333;          /* "POLO - BLUMENAU" text on green */
+    --text-header-user-link: #333333;           /* "Perfil do usuário" text */
+    --text-header-icons: #757575;               /* Header icons (bell, mail, profile) */
+    --text-breadcrumbs: #333333;                /* Breadcrumbs text on green */
+    --text-card-title-strong: #000000;          /* e.g. "Jonathan" in feedback pane - strong black */
+    --text-card-subtitle: #555555;              /* e.g. "Nota: 10" (adjusted for image) */
+    --text-input-placeholder: #999999;          /* Textarea placeholder text (adjusted for image) */
+    --text-badge-notification: white;           /* Text on notification badges */
+
+    /* Borders */
+    --border-header-bottom: #E0E0E0;
+    --border-student-list-table: #E0E0E0;      /* Table borders in student list (adjusted for image) */
+    --border-input-textarea: #E0E0E0;          /* Textarea border - subtle (adjusted for image) */
+
+    /* Radii */
+    --border-radius-card: 16px;                 /* Rounded corners for cards */
+    --border-radius-button: 8px;                /* Rounded corners for buttons */
+    --border-radius-input: 8px;                 /* Rounded corners for inputs */
+    --border-radius-emphasis-tag: 6px;          /* For "POLO - BLUMENAU" */
+    --border-radius-breadcrumbs: 8px;           /* For breadcrumbs bar */
+}
+
+/* ==========================================================================
+   2. Base Styles
+   ========================================================================== */
+body {
+    font-family: var(--font-family-main);
+    margin: 0;
+    background-color: var(--bg-main);
+    color: var(--text-on-dark-bg); /* Default text color, mostly overridden by specific components */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   3. Main Layout Structure (No Sidebar in Image)
+   ========================================================================== */
+.app-header {
+    background-color: var(--bg-header);
+    padding: 10px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-header-bottom);
+    color: var(--text-on-light-bg); /* Default text color within header */
+    min-height: 40px; /* Image header height */
+}
+
+.main-container {
+    /* display: flex; Removed as sidebar is not in this view */
+    padding: 0; /* No padding, content-area will handle it */
+}
+
+.content-area {
+    /* flex-grow: 1; Removed as sidebar is not in this view */
+    padding: 25px; /* Padding around the evaluation layout */
+    background-color: var(--bg-main); /* Matches body background */
+}
+
+/* Sidebar styles removed/commented as not present in the target image */
+/*
+.sidebar { ... }
+.sidebar-nav ul { ... }
+.sidebar-nav li a { ... }
+*/
+
+/* ==========================================================================
+   4. Header Components
+   ========================================================================== */
+.logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.logo-area .logo-main {
+    color: var(--text-logo-main);
+    font-weight: bold;
+    font-size: 1.5em; /* Adjusted for image */
+    letter-spacing: 0.5px;
+}
+.logo-area .logo-sub {
+    font-size: 0.8em;
+    color: var(--text-logo-sub-emphasis);
+    background-color: var(--bg-logo-sub-emphasis);
+    padding: 3px 10px;
+    border-radius: var(--border-radius-emphasis-tag);
+    display: inline-block;
+    line-height: 1.2;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+/* Dentro de avaliacao.css, na seção de .header-actions */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espaçamento entre todos os itens, incluindo o botão de toggle */
+}
+
+.header-actions .user-profile-link {
+    color: var(--text-header-user-link); /* Supondo que você tenha essa variável */
+    text-decoration: none;
+    font-size: 0.85em;
+    font-weight: 500;
+}
+
+.header-actions .icon-placeholder {
+    position: relative;
+    cursor: pointer;
+    display: flex; /* Para centralizar o badge se houver */
+    align-items: center;
+}
+
+.header-actions .icon-placeholder img { /* Estilo para os ícones SVG */
+    height: 50px; /* Tamanho desejado para os ícones */
+    width: 50px;
+}
+
+.header-actions .icon-placeholder .badge { /* Se você adicionar os badges */
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    background-color: var(--bg-badge-notification); /* Sua variável de cor */
+    color: var(--text-badge-notification);       /* Sua variável de cor */
+    border-radius: 50%;
+    min-width: 13px;
+    height: 13px;
+    padding: 0 2px;
+    font-size: 1.2em; /* Relativo ao tamanho do ícone/placeholder */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    border: 1px solid var(--bg-header); /* Sua variável de cor */
+    box-sizing: content-box;
+}
+
+.app-header .role-toggle-button { /* Estilo para o botão "Aluno" */
+    padding: 6px 12px;
+    font-size: 0.8em;
+    background-color: var(--bg-options-icon-button, #9ABE31); /* Usando uma cor de destaque */
+    color: var(--text-on-light-bg, #333);
+    border: none;
+    border-radius: var(--border-radius-button, 6px); /* Sua variável de raio */
+    cursor: pointer;
+    font-weight: 500;
+    transition: filter 0.2s;
+}
+.app-header .role-toggle-button:hover {
+    filter: brightness(95%);
+} toggle buttons removed as not in target image */
+/*
+.app-header .role-toggle-button,
+.app-header .theme-toggle-button { ... }
+*/
+
+/* ==========================================================================
+   5. Content Area Components
+   ========================================================================== */
+.breadcrumbs {
+    background-color: var(--bg-breadcrumbs);
+    color: var(--text-breadcrumbs);
+    padding: 12px 20px; /* Adjusted for image */
+    border-radius: var(--border-radius-breadcrumbs);
+    margin-bottom: 25px; /* Adjusted for image */
+    font-size: 0.95em; /* Adjusted for image */
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   6. Evaluation Page Layout
+   ========================================================================== */
+.evaluation-layout {
+    display: flex;
+    gap: 100px; /* Space between student list and feedback pane from image */
+}
+.student-list-pane {
+    flex: 0 0 320px; /* Adjusted width from image */
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: var(--border-radius-card);
+    color: var(--text-on-light-bg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.student-feedback-pane {
+    flex-grow: 1;
+    background-color: var(--bg-card);
+    padding: 30px; /* Adjusted padding from image */
+    border-radius: var(--border-radius-card);
+    color: var(--text-on-light-bg);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* ==========================================================================
+   7. Student List Pane Components
+   ========================================================================== */
+.student-list-pane table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.student-list-pane th,
+.student-list-pane td {
+    text-align: left;
+    padding: 12px 8px; /* Adjusted padding for image */
+    font-size: 0.9em; /* Adjusted for image */
+    border-bottom: 1px solid var(--border-student-list-table);
+    vertical-align: middle;
+}
+.student-list-pane th {
+    font-weight: 600;
+    color: var(--text-on-light-bg);
+    background-color: var(--bg-student-list-table-header);
+    border-top: 1px solid var(--border-student-list-table); /* Add top border for header */
+}
+.student-list-pane th:first-child {
+    border-top-left-radius: 6px; /* Rounded corners for table header */
+}
+.student-list-pane th:last-child {
+    border-top-right-radius: 6px; /* Rounded corners for table header */
+    text-align: center; /* Ensure options header is centered if it existed */
+}
+.student-list-pane tr:last-child td {
+    border-bottom: none;
+}
+.student-list-pane tr:hover {
+    background-color: rgba(0,0,0,0.02); /* Subtle hover */
+    cursor: pointer;
+}
+.student-list-pane .options-icon {
+    display: inline-flex; /* Use flex to center content */
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em; /* dots size */
+    color: var(--text-on-light-bg); /* Color of the dots */
+    text-align: center;
+    cursor: pointer;
+    padding: 8px; /* Padding inside the button */
+    width: 36px; /* Fixed width */
+    height: 36px; /* Fixed height */
+    border-radius: var(--border-radius-button);
+    background-color: var(--bg-options-icon-button);
+    font-weight: bold;
+}
+.student-list-pane td:last-child { /* To center the options icon button */
+    text-align: center;
+}
+
+
+/* ==========================================================================
+   8. Student Feedback Pane Components
+   ========================================================================== */
+.student-feedback-pane h2 {
+    font-size: 1.8em; /* "Jonathan" title size from image */
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: var(--text-card-title-strong);
+    font-weight: 700;
+}
+.student-feedback-pane .grade-display {
+    font-size: 0.9em; /* "Nota: 10" size from image */
+    color: var(--text-card-subtitle);
+    margin-bottom: 25px; /* Spacing below nota */
+}
+.student-feedback-pane label {
+    display: block;
+    margin-bottom: 10px; /* Spacing below "Pontos a melhorar" */
+    font-weight: 600;
+    font-size: 0.95em; /* Label size */
+    color: var(--text-on-light-bg);
+}
+.student-feedback-pane textarea {
+    width: calc(100% - 22px); /* padding 10px left/right + border 1px left/right */
+    min-height: 150px; /* Adjusted height from image */
+    padding: 12px; /* Padding inside textarea */
+    margin-bottom: 30px; /* Spacing below textarea */
+    background-color: var(--bg-input-textarea);
+    color: var(--text-on-light-bg);
+    border: 1px solid var(--border-input-textarea);
+    border-radius: var(--border-radius-input);
+    font-size: 0.95em;
+    resize: vertical;
+    line-height: 1.5;
+}
+.student-feedback-pane textarea::placeholder {
+    color: var(--text-input-placeholder);
+    opacity: 1; /* Browsers sometimes reduce opacity */
+}
+.student-feedback-pane button.submit-btn {
+    background-color: var(--bg-submit-button);
+    color: var(--text-on-light-bg);
+    padding: 12px 30px; /* Adjusted padding from image */
+    border: none;
+    border-radius: var(--border-radius-button);
+    cursor: pointer;
+    font-size: 1em; /* Button text size */
+    font-weight: 600;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; /* Centered as in image */
+    min-width: 150px; /* Minimum width for the button */
+}
+.student-feedback-pane button.submit-btn:hover {
+    filter: brightness(95%);
+}
+
+/* ==========================================================================
+   9. Material Item Styles (for recommendations, if displayed)
+   ========================================================================== */
+.materials-list-recommendations {
+    margin-top: 25px;
+}
+.material-item {
+    background-color: var(--bg-material-item); /* Light grey, similar to textarea */
+    border: 1px solid var(--border-input-textarea); /* Consistent border */
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: var(--border-radius-input); /* Consistent radius */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-on-light-bg);
+}
+.material-item .info .title {
+    font-weight: 500;
+    display: block;
+    margin-bottom: 2px;
+    font-size: 0.95em;
+}
+.material-item .info .type {
+    font-size: 0.8em;
+    color: var(--text-card-subtitle);
+}
+.material-item .action-icon {
+    font-size: 1.3em;
+    color: var(--bg-submit-button); /* Using the same green for consistency */
+    cursor: pointer;
+    text-decoration: none;
+}
+.material-item .action-icon:hover {
+    filter: brightness(90%);
+}
+
+/* ==========================================================================
+   10. Utility Classes
+   ========================================================================== */
+.hidden {
+    display: none !important; /* Ensure it overrides other display properties */
+}
+/* In section 4. Header Components of avaliacao.css */
+.logo-area .logo-main-img {
+    height: 60px; /* Ajuste conforme a altura desejada para o SVG */
+    width: auto;
+    display: block;
+}
