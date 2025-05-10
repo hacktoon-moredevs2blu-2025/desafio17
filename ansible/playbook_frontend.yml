@@ -1,0 +1,33 @@
+---
+- name: Deploy do frontend usando arquivos locais
+  hosts: app
+  become: yes
+
+  vars:
+    local_frontend: "../front-end"
+    nginx_root: "/var/www/html"
+
+  tasks:
+    - name: Instala NGINX
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Remove arquivos padrão do NGINX
+      file:
+        path: "{{ nginx_root }}/index.nginx-debian.html"
+        state: absent
+
+    - name: Copia o frontend local para a EC2
+      copy:
+        src: "{{ local_frontend }}/"
+        dest: "{{ nginx_root }}/"
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Reinicia o NGINX
+      service:
+        name: nginx
+        state: restarted

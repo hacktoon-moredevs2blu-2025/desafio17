@@ -1,0 +1,40 @@
+---
+- name: Deploy do .jar do backend já compilado
+  hosts: app
+#  become: yes
+
+  vars:
+    jar_local: "../back-end/app.jar"
+    remote_dir: "/home/ubuntu/app"
+    jar_name: "app.jar"
+    zip_name: "app.zip"
+
+  tasks:
+    - name: Cria diretório remoto
+      file:
+        path: "{{ remote_dir }}"
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: "0755"
+
+    - name: Comprime o .jar localmente
+      delegate_to: localhost
+      run_once: true
+      shell: zip -j /tmp/{{ zip_name }} {{ jar_local }}
+
+    - name: Copia o .zip para a EC2
+      copy:
+        src: "/tmp/{{ zip_name }}"
+        dest: "{{ remote_dir }}/{{ zip_name }}"
+
+    - name: Descompacta o .zip na EC2
+      unarchive:
+        src: "{{ remote_dir }}/{{ zip_name }}"
+        dest: "{{ remote_dir }}/"
+        remote_src: yes
+
+    - name: Executa o .jar na porta 8080 com nohup
+      shell: "nohup java -jar {{ remote_dir }}/{{ jar_name }} > {{ remote_dir }}/log.out 2>&1 &"
+      args:
+        chdir: "{{ remote_dir }}"
